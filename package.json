@@ -1,0 +1,37 @@
+{
+  "name": "react-mutable-context",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "lint": "tsc",
+    "build": "",
+    "dev": ""
+  },
+  "keywords": [
+    "React",
+    "Context",
+    "Mutable",
+    "Observable",
+    "Selector"
+  ],
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "bracketSameLine": true,
+    "tabWidth": 2,
+    "printWidth": 80
+  },
+  "author": "Christian Falch",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.21",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.3"
+  }
+}
