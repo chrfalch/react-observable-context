@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "description": "Observable context for React",
   "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
     "tsclint": "tsc",
     "eslint": "eslint src",
     "lint": "pnpm run tsclint && pnpm run eslint",
-    "build": "tsup src/index.ts --format cjs, esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "vitest",
     "ci": "pnpm run lint && pnpm run test && pnpm run build"
   },
@@ -18,7 +19,8 @@
     "Context",
     "Mutable",
     "Observable",
-    "Selector"
+    "Selector",
+    "State management"
   ],
   "prettier": {
     "semi": true,
