@@ -1,11 +1,12 @@
-import {Flatten, NestedKeyOf} from './types';
+import { Flatten, NestedKeyOf } from './types';
 
 // Resolves a nested key of an object to the value in the object
 export const resolve = <T extends object, K extends NestedKeyOf<T>>(
   obj: T,
-  path: K,
+  path: K
 ) =>
   path.split('.').reduce((p, c) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return p?.[c];
   }, obj);
@@ -23,15 +24,21 @@ export const typedKeys = <T extends object>(obj: T) =>
  * @param obj Object to flatten
  * @returns A flattened object.
  */
-export const flatten = <T extends Object>(obj: T, parentKey?: string) => {
+export const flatten = <T extends Record<string, unknown>>(
+  obj: T,
+  parentKey?: string
+) => {
   let result = {};
 
   Object.entries(obj).forEach(([key, value]) => {
     const flattenedKey = parentKey ? parentKey + '.' + key : key;
     if (typeof value === 'object') {
-      result = {...result, ...flatten(value, flattenedKey)};
+      result = {
+        ...result,
+        ...flatten(value as Record<string, unknown>, flattenedKey),
+      };
     } else {
-      (result as any)[flattenedKey] = value;
+      (result as Record<string, unknown>)[flattenedKey] = value;
     }
   });
 

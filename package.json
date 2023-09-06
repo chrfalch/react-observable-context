@@ -1,11 +1,14 @@
 {
   "name": "@chrfalch/react-observable-context",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Observable context for React",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
-    "lint": "tsc",
+    "tsclint": "tsc",
+    "eslint": "eslint src",
+    "lint": "pnpm run tsclint && pnpm run eslint",
     "build": "tsup src/index.ts --format cjs, esm --dts",
     "dev": "vitest",
     "ci": "pnpm run lint && pnpm run test && pnpm run build"
@@ -33,6 +36,10 @@
   "devDependencies": {
     "@types/node": "^20.5.9",
     "@types/react": "^18.2.21",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.3"
