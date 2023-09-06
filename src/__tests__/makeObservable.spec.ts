@@ -160,7 +160,7 @@ describe('EventBetterContext', () => {
     });
   });
   describe('methods', () => {
-    it('should allow a method to change the observable', () => {
+    it('should allow context to have a method that changes the observable', () => {
       const ctx = makeObservable({
         a: 100,
         increment() {
@@ -169,6 +169,20 @@ describe('EventBetterContext', () => {
       });
       ctx.increment();
       expect(ctx.a).toBe(200);
+    });
+
+    it('should notify any listeners when value is changed through context method', () => {
+      const ctx = makeObservable({
+        a: 100,
+        increment() {
+          this.a += 100;
+        },
+      });
+      const callback = vi.fn();
+      ctx.subscribe('a', callback);
+      ctx.increment();
+      expect(ctx.a).toBe(200);
+      expect(callback).toBeCalled();
     });
   });
 });
