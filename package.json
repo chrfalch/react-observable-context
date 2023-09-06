@@ -2,6 +2,8 @@
   "name": "@chrfalch/react-observable-context",
   "version": "0.0.1",
   "description": "Observable context for React",
+  "private": false,
+  "repository": "https://github.com/chrfalch/react-observable-context",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,7 +14,8 @@
     "lint": "pnpm run tsclint && pnpm run eslint",
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "vitest",
-    "ci": "pnpm run lint && pnpm run test && pnpm run build"
+    "ci": "pnpm run lint && pnpm run test && pnpm run build",
+    "release": "pnpm run lint && pnpm run test && pnpm run build && pnpm run changeset publish"
   },
   "keywords": [
     "React",
@@ -36,6 +39,7 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@types/node": "^20.5.9",
     "@types/react": "^18.2.21",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
