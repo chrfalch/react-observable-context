@@ -1,13 +1,14 @@
 {
-  "name": "react-mutable-context",
+  "name": "@chrfalch/react-observable-context",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "lint": "tsc",
-    "build": "",
-    "dev": ""
+    "build": "tsup src/index.ts --format cjs, esm --dts",
+    "dev": "vitest",
+    "ci": "pnpm run lint && pnpm run test && pnpm run build"
   },
   "keywords": [
     "React",
@@ -30,7 +31,9 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.5.9",
     "@types/react": "^18.2.21",
+    "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.3"
   }
