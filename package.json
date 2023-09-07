@@ -1,6 +1,6 @@
 {
   "name": "@chrfalch/react-observable-context",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Observable context for React",
   "private": false,
   "repository": "https://github.com/chrfalch/react-observable-context",
