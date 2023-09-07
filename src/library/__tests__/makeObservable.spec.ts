@@ -1,7 +1,7 @@
 import { vi, describe, it, expect } from 'vitest';
 import { makeObservable } from '../makeObservable';
 
-describe('EventBetterContext', () => {
+describe('makeObservable', () => {
   describe('Reading/Writing', () => {
     it('should make primitive properties readable', () => {
       const ctx = makeObservable({ a: 1, b: 2 });
