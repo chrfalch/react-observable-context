@@ -1,5 +1,11 @@
 # @chrfalch/react-observable-context
 
+## 0.2.0
+
+### Minor Changes
+
+- Fixing typing and return values from useObserver
+
 ## 0.1.0
 
 ### Minor Changes

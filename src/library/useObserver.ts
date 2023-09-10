@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
-import { TObservableObject, NestedKeyOf, ExtractPropsArray } from './types';
-import { resolve, typedKeys } from './utils';
+import { useEffect, useState } from 'react';
+import { TObservableObject, NestedKeyOf } from './types';
+import { extract, flatten, resolve } from './utils';
 
 /**
  * Creates a selector that subscribes to parts of the observable and returns the value of observed properties.
@@ -11,26 +11,20 @@ import { resolve, typedKeys } from './utils';
 export const useObserver = <
   TValue extends Record<string, unknown>,
   TObservable extends TObservableObject<TValue>,
-  TKeys extends Exclude<NestedKeyOf<TObservable>, 'subscribe'>,
-  TSelectedKeys extends Array<TKeys>
+  TKeys extends Exclude<NestedKeyOf<TObservable>, 'subscribe'>
 >(
   observable: TObservable,
-  ...props: TSelectedKeys
+  ...props: TKeys[]
 ) => {
   // We keep two states, one that trackes the changes in the observable
   // and one that tracks the state with the observed value
   const [_, inc] = useState(0);
-  const [state, setState] = useState(() =>
-    props.reduce((arr, key) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      arr[key] = resolve(
-        observable as TObservable,
-        key as unknown as NestedKeyOf<TObservable>
-      );
-      return arr;
-    }, {})
-  );
+  const [state, setState] = useState(() => {
+    const flat = flatten(observable);
+    const p = props as unknown as keyof typeof flat;
+    return extract(flat, p);
+  });
+
   useEffect(() => {
     const unsubscribers = props.map((prop) => {
       return observable.subscribe(prop as NestedKeyOf<TValue>, () => {
@@ -47,12 +41,7 @@ export const useObserver = <
     return () => unsubscribers.forEach((un) => un());
   }, [observable, props]);
 
-  return useMemo(
-    () =>
-      typedKeys(state).map((key) => state[key]) as unknown as ExtractPropsArray<
-        TValue,
-        typeof props
-      >,
-    [state]
-  );
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return state as Pick<typeof state, TKeys>;
 };
