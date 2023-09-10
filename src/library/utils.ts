@@ -1,4 +1,4 @@
-import { Flatten, NestedKeyOf } from './types';
+import { NestedKeyOf, NestedObjectOf } from './types';
 
 // Resolves a nested key of an object to the value in the object
 export const resolve = <T extends object, K extends NestedKeyOf<T>>(
@@ -12,14 +12,6 @@ export const resolve = <T extends object, K extends NestedKeyOf<T>>(
   }, obj);
 
 /**
- * Utility for getting typed keys from an object
- * @param obj Object to get keys from
- * @returns Keys of the object
- */
-export const typedKeys = <T extends object>(obj: T) =>
-  Object.keys(obj) as (keyof T)[];
-
-/**
  * Flattens a nested object to a flat object with dot notation
  * @param obj Object to flatten
  * @returns A flattened object.
@@ -27,7 +19,7 @@ export const typedKeys = <T extends object>(obj: T) =>
 export const flatten = <T extends Record<string, unknown>>(
   obj: T,
   parentKey?: string
-) => {
+): NestedObjectOf<T> => {
   let result = {};
 
   Object.entries(obj).forEach(([key, value]) => {
@@ -35,6 +27,7 @@ export const flatten = <T extends Record<string, unknown>>(
     if (typeof value === 'object') {
       result = {
         ...result,
+        [flattenedKey]: value,
         ...flatten(value as Record<string, unknown>, flattenedKey),
       };
     } else {
@@ -42,5 +35,20 @@ export const flatten = <T extends Record<string, unknown>>(
     }
   });
 
-  return result as Flatten<T>;
+  return result as NestedObjectOf<T>;
 };
+
+/**
+ * Extracts a subset of an object based on the provided keys
+ * @param obj Object to extract from
+ * @param keys Keys to extract
+ */
+export function extract<T, K extends keyof T>(
+  obj: T,
+  ...keys: K[]
+): Pick<T, K> {
+  return keys.reduce((newObj, curr) => {
+    newObj[curr] = obj[curr];
+    return newObj;
+  }, {} as Pick<T, K>);
+}
