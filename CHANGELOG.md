@@ -1,5 +1,11 @@
 # @chrfalch/react-observable-context
 
+## 0.2.1
+
+### Patch Changes
+
+- Fix passing props to extract
+
 ## 0.2.0
 
 ### Minor Changes

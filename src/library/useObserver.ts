@@ -21,8 +21,11 @@ export const useObserver = <
   const [_, inc] = useState(0);
   const [state, setState] = useState(() => {
     const flat = flatten(observable);
-    const p = props as unknown as keyof typeof flat;
-    return extract(flat, p);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return extract(flat, ...(props as any)) as Record<
+      NestedKeyOf<TValue>,
+      unknown
+    >;
   });
 
   useEffect(() => {
