@@ -89,9 +89,7 @@ const {counter, isPaused} = useObserver(ctx, 'counter', 'isPaused');
 
 ## useObservable
 
-This hook lets you create a memoized observable object. It accepts an object as an argument and returns an observable object. The returned object is memoized, so it will only be re-created when the object passed to the hook changes.
-
-The initial value will only be read once - the hook does not update the observable if the initial value changes.
+This hook lets you create a memoized observable object. It accepts an object as an argument and returns a memoized observable object. 
 
 This hook is typically used to create the context object with a specific value when using a Context Provider:
 
@@ -100,3 +98,5 @@ This hook is typically used to create the context object with a specific value w
 const contextValue = useObservable({ counter: 1 });
 return <MyContext.Provider value={contextValue}>{children}</MyContext.Provider>;
 ```
+> 💡 **Tips:**
+>The initial value will only be read once - the hook does not update the observable if the initial value is changed.
