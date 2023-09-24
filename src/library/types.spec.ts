@@ -11,16 +11,17 @@ declare const exactType: <T, U>(
   expected: U & IfEquals<T, U>
 ) => IfEquals<T, U>;
 
-type MockObject = {
+type MockType = {
   a: number;
   b: number;
   c: { d: string };
   e: Array<string>;
   f: Array<{ g: string; h: number }>;
+  i: (a: number) => string;
 };
 
 // Tests - FlattenedKeysOf
-type ExpectedFlattenedKeysOf = FlattenedKeysOf<MockObject>;
+type ExpectedFlattenedKeysOf = FlattenedKeysOf<MockType>;
 declare let expected_1: ExpectedFlattenedKeysOf;
 declare let received_1:
   | 'a'
@@ -32,12 +33,14 @@ declare let received_1:
   | 'e.length'
   | 'f.length'
   | `f.${number}.g`
-  | `f.${number}.h`;
+  | `f.${number}.h`
+  | 'i';
+
 // @ts-expect-no-error
 exactType(expected_1, received_1);
 
 // Tests - FlattenedObjectOf
-type ExpectedFlattenedObjectOf = FlattenedObjectOf<MockObject>;
+type ExpectedFlattenedObjectOf = FlattenedObjectOf<MockType>;
 declare let expected_2: ExpectedFlattenedObjectOf;
 declare let received_2: {
   [x: `e.${number}`]: string;
@@ -50,6 +53,7 @@ declare let received_2: {
   'f.length': number;
   e: Array<string>;
   f: Array<{ g: string; h: number }>;
+  i: (a: number) => string;
 };
 // eslint-disable-next-line prefer-const
 received_2 = {
@@ -63,6 +67,7 @@ received_2 = {
   'f.0.h': 10,
   f: [{ g: 'Hello', h: 10 }],
   e: ['10'],
+  i: (a: number) => a.toString(),
 };
 // @ts-expect-no-error
 exactType(expected_2, received_2);

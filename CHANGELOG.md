@@ -1,5 +1,11 @@
 # @chrfalch/react-observable-context
 
+## 0.3.1
+
+### Patch Changes
+
+- Fixing types for functions in objects
+
 ## 0.3.0
 
 ### Minor Changes

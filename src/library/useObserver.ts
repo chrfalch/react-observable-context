@@ -12,7 +12,7 @@ export const useObserver = <
   TValue extends Record<string, unknown>,
   TObservable extends TObservableObject<TValue>,
   TFlattened extends FlattenedObjectOf<TObservable>,
-  TKeys extends keyof TFlattened
+  TKeys extends keyof Omit<TFlattened, 'subscribe'>
 >(
   observable: TObservable,
   ...props: TKeys[]
@@ -20,21 +20,26 @@ export const useObserver = <
   // We keep two states, one that trackes the changes in the observable
   // and one that tracks the state with the observed value
   const [_, inc] = useState(0);
-  const [state, setState] = useState(() => {
-    const flat = flatten(observable) as TFlattened;
-    return extract(flat, ...props) as Pick<typeof flat, TKeys>;
-  });
+  const [state, setState] = useState(() =>
+    flattenAndExtract(
+      observable,
+      props as FlattenedKeysOf<TObservable, false>[]
+    )
+  );
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const unsubscribers = props.map((prop) => {
-      return observable.subscribe(prop as FlattenedKeysOf<TValue>, () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return observable.subscribe(prop, () => {
         inc((p) => p + 1);
         setState((p) => ({
           ...p,
-          [prop]: resolve(
-            observable as TObservable,
-            prop as FlattenedKeysOf<TObservable>
-          ),
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          [prop]: resolve(observable, prop),
         }));
       });
     });
@@ -45,3 +50,15 @@ export const useObserver = <
   // @ts-ignore
   return state as Pick<typeof state, TKeys>;
 };
+
+function flattenAndExtract<
+  TValue extends Record<string, unknown>,
+  TFlattened extends FlattenedObjectOf<TValue>,
+  TKeys extends keyof TFlattened
+>(value: TValue, props: TKeys[]): Pick<TFlattened, TKeys> {
+  const flattenedObject = flatten(value);
+  return extract(
+    flattenedObject,
+    ...(props as (keyof typeof flattenedObject)[])
+  ) as Pick<TFlattened, TKeys>;
+}

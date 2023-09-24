@@ -1,8 +1,24 @@
-export type FlattenedKeysOf<T extends object> = {
-  [Key in keyof T & (string | number)]: T[Key] extends object
+type IsFunction<T> = T extends () => unknown
+  ? true
+  : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends (...args: any[]) => unknown
+  ? true
+  : false;
+
+export type FlattenedKeysOf<
+  T extends object,
+  TArrayLike extends boolean = false
+> = {
+  [Key in keyof T & (string | number)]: IsFunction<T[Key]> extends true
+    ? // Functions inside array should not be flattened.
+      TArrayLike extends false
+      ? `${Key}`
+      : never
+    : T[Key] extends object
     ? T[Key] extends Array<unknown>
-      ? `${Key}` | `${Key}.${FlattenedKeysOf<T[Key]>}`
-      : `${Key}.${FlattenedKeysOf<T[Key]>}`
+      ? // Arrays should have both array and objects by indicies and length properties
+        `${Key}` | `${Key}.${FlattenedKeysOf<T[Key], true>}`
+      : `${Key}.${FlattenedKeysOf<T[Key], TArrayLike>}`
     : `${Key}`;
 }[keyof T & (string | number)];
 

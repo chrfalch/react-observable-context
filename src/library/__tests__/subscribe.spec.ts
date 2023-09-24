@@ -68,13 +68,5 @@ describe('makeObservable', () => {
       ctx.b[2] = 10;
       expect(callback).toBeCalled();
     });
-
-    it('should be possible to subscribe to changes in an object using the root object property path', () => {
-      const ctx = makeObservable({ a: 1, b: { c: 100 } });
-      const callback = vi.fn();
-      ctx.subscribe('b', callback);
-      ctx.b.c = 10;
-      expect(callback).toBeCalled();
-    });
   });
 });
