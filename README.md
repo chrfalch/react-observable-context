@@ -1,5 +1,15 @@
 # React Observable Context
 
+<a href="https://github.com/chrfalch/react-observable-context/actions?query=workflow%3A%22CI%22">
+  <img src="https://github.com/chrfalch/react-observable-context/workflows/CI/badge.svg" />
+</a>
+<a href="https://www.npmjs.com/package/@chrfalch/react-observable-context" target="\_parent">
+  <img alt="" src="https://img.shields.io/npm/dm/@chrfalch/react-observable-context.svg" />
+</a>
+<a href="https://bundlephobia.com/package/@chrfalch/react-observable-context@latest" target="\_parent">
+  <img alt="" src="https://badgen.net/bundlephobia/minzip/@chrfalch/react-observable-context" />
+</a>
+
 React's context is good - but we can do better!
 
 - 🧭 Avoid re-renders of root components with contexts
