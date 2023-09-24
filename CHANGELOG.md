@@ -1,5 +1,11 @@
 # @chrfalch/react-observable-context
 
+## 0.3.0
+
+### Minor Changes
+
+- Updated types and tests
+
 ## 0.2.1
 
 ### Patch Changes

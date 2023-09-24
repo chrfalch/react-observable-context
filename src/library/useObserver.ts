@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TObservableObject, NestedKeyOf } from './types';
+import { TObservableObject, FlattenedKeysOf, FlattenedObjectOf } from './types';
 import { extract, flatten, resolve } from './utils';
 
 /**
@@ -11,7 +11,8 @@ import { extract, flatten, resolve } from './utils';
 export const useObserver = <
   TValue extends Record<string, unknown>,
   TObservable extends TObservableObject<TValue>,
-  TKeys extends Exclude<NestedKeyOf<TObservable>, 'subscribe'>
+  TFlattened extends FlattenedObjectOf<TObservable>,
+  TKeys extends keyof TFlattened
 >(
   observable: TObservable,
   ...props: TKeys[]
@@ -20,23 +21,19 @@ export const useObserver = <
   // and one that tracks the state with the observed value
   const [_, inc] = useState(0);
   const [state, setState] = useState(() => {
-    const flat = flatten(observable);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return extract(flat, ...(props as any)) as Record<
-      NestedKeyOf<TValue>,
-      unknown
-    >;
+    const flat = flatten(observable) as TFlattened;
+    return extract(flat, ...props) as Pick<typeof flat, TKeys>;
   });
 
   useEffect(() => {
     const unsubscribers = props.map((prop) => {
-      return observable.subscribe(prop as NestedKeyOf<TValue>, () => {
+      return observable.subscribe(prop as FlattenedKeysOf<TValue>, () => {
         inc((p) => p + 1);
         setState((p) => ({
           ...p,
           [prop]: resolve(
             observable as TObservable,
-            prop as NestedKeyOf<TObservable>
+            prop as FlattenedKeysOf<TObservable>
           ),
         }));
       });

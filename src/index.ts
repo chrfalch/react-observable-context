@@ -1,6 +1,6 @@
 import { createContext } from './library/createContext';
 import { makeObservable } from './library/makeObservable';
-import type { NestedKeyOf } from './library/types';
+import type { FlattenedKeysOf } from './library/types';
 import { useObserver } from './library/useObserver';
 import { useObservable } from './library/useObservable';
 
@@ -22,4 +22,4 @@ export {
   useObserver,
   useObservable,
 };
-export type { NestedKeyOf };
+export type { FlattenedKeysOf };

@@ -1,7 +1,7 @@
-import { NestedKeyOf, NestedObjectOf } from './types';
+import { FlattenedKeysOf, FlattenedObjectOf } from './types';
 
 // Resolves a nested key of an object to the value in the object
-export const resolve = <T extends object, K extends NestedKeyOf<T>>(
+export const resolve = <T extends object, K extends FlattenedKeysOf<T>>(
   obj: T,
   path: K
 ) =>
@@ -19,23 +19,32 @@ export const resolve = <T extends object, K extends NestedKeyOf<T>>(
 export const flatten = <T extends Record<string, unknown>>(
   obj: T,
   parentKey?: string
-): NestedObjectOf<T> => {
+): FlattenedObjectOf<T> => {
   let result = {};
 
   Object.entries(obj).forEach(([key, value]) => {
     const flattenedKey = parentKey ? parentKey + '.' + key : key;
-    if (typeof value === 'object') {
+    if (value instanceof Array) {
       result = {
         ...result,
         [flattenedKey]: value,
-        ...flatten(value as Record<string, unknown>, flattenedKey),
+        [`${flattenedKey}.length`]: value.length,
+        ...flatten(
+          value as unknown as Record<typeof flattenedKey, unknown>,
+          flattenedKey
+        ),
+      };
+    } else if (typeof value === 'object') {
+      result = {
+        ...result,
+        ...flatten(value as Record<typeof flattenedKey, unknown>, flattenedKey),
       };
     } else {
       (result as Record<string, unknown>)[flattenedKey] = value;
     }
   });
 
-  return result as NestedObjectOf<T>;
+  return result as FlattenedObjectOf<T>;
 };
 
 /**
